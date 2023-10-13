@@ -1,0 +1,85 @@
+{
+        // Use IntelliSense to learn about possible attributes.
+        // Hover to view descriptions of existing attributes.
+        // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+        "version": "0.2.0",
+        "configurations": [
+                {
+                        "name": "Launch client",
+                        "type": "cppdbg",
+                        "request": "launch",
+                        "program": "${workspaceFolder}/build/client",
+                        "args": [],
+                        "stopAtEntry": false,
+                        "cwd": "${workspaceFolder}/logs",
+                        "environment": [],
+                        "externalConsole": false,
+                        "MIMode": "gdb",
+                        "setupCommands": [
+                            {
+                                "description": "Enable pretty-printing for gdb",
+                                "text": "-enable-pretty-printing",
+                                "ignoreFailures": true
+                            },
+                            {
+                                "description": "Set Disassembly Flavor to Intel",
+                                "text": "-gdb-set disassembly-flavor intel",
+                                "ignoreFailures": true
+                            },
+                            {
+                                "description": "Set Disassembly Flavor to Intel",
+                                "text": "handle SIGINT nostop",
+                                "ignoreFailures": false
+                            },
+                        ]
+                },
+                {
+                        "name": "Launch server",
+                        "type": "cppdbg",
+                        "request": "launch",
+                        "program": "${workspaceFolder}/build/server",
+                        "args": [],
+                        "stopAtEntry": false,
+                        "cwd": "${workspaceFolder}/logs",
+                        "environment": [],
+                        "externalConsole": false,
+                        "MIMode": "gdb",
+                        "setupCommands": [
+                            {
+                                "description": "Enable pretty-printing for gdb",
+                                "text": "-enable-pretty-printing",
+                                "ignoreFailures": true
+                            },
+                            {
+                                "description": "Set Disassembly Flavor to Intel",
+                                "text": "-gdb-set disassembly-flavor intel",
+                                "ignoreFailures": true
+                            }
+                        ]
+                },
+                {
+                    "name": "Launch server add user",
+                    "type": "cppdbg",
+                    "request": "launch",
+                    "program": "${workspaceFolder}/build/server",
+                    "args": ["--add-user"],
+                    "stopAtEntry": false,
+                    "cwd": "${workspaceFolder}/logs",
+                    "environment": [],
+                    "externalConsole": false,
+                    "MIMode": "gdb",
+                    "setupCommands": [
+                        {
+                            "description": "Enable pretty-printing for gdb",
+                            "text": "-enable-pretty-printing",
+                            "ignoreFailures": true
+                        },
+                        {
+                            "description": "Set Disassembly Flavor to Intel",
+                            "text": "-gdb-set disassembly-flavor intel",
+                            "ignoreFailures": true
+                        }
+                    ]
+            },
+        ]
+}

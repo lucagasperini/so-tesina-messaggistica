@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/lib/include/"
+            ],
+            "defines": [
+                "MAX_CONNECTION=10",
+                "THREAD_NUM=10",
+                "SERVER_MAIN_DIR=\"\"",
+                "CLIENT_MAIN_DIR=\"\""
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu23",
+            "cppStandard": "c++23",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
