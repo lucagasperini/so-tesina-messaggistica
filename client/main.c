@@ -6,7 +6,7 @@
 #include <errno.h> // errno
 #include <string.h> // strtok, strlen, strchr, strncmp
 #include <ctype.h>  // tolower
-#include <signal.h> // signal
+#include <signal.h> // sigaction, sigfillset
 
 
 #define STR_HOST_DEFAULT "127.0.0.1"
@@ -64,7 +64,7 @@ int op_list()
 bool sigint_pressed = false;
 void sigint_handler(int code)
 {
-        MATRIX_LOG_INFO("SIGINT pressed");
+        MATRIX_LOG_INFO("SIGINT catch");
         sigint_pressed = true;
 }
 
@@ -143,6 +143,7 @@ int op_send()
         }
 }
 
+//TODO: Fix overflow on read message
 int op_read()
 {
         MATRIX_LOG_INFO("Read operation");
@@ -353,6 +354,7 @@ int main(int argc, char** argv)
                 }
         }
 
+        //TODO: Signal management on matrix library?
         // Setup SIGINT action
         struct sigaction sa;
         sa.sa_handler = &sigint_handler;

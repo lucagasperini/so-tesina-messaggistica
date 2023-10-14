@@ -5,6 +5,7 @@
 #include <stdio.h> // printf
 #include <stdlib.h> // strtol, EXIT_SUCCESS, EXIT_FAILURE
 #include <string.h> // strtok_r, strcmp
+#include <signal.h> // sigaction, sigfillset
 
 #include "users.h"
 
@@ -13,6 +14,12 @@
 matrix_connection con_server;
 
 int sys_running = 1;
+
+void sigint_handler(int code)
+{
+        MATRIX_LOG_INFO("SIGINT catch");
+        exit(EXIT_SUCCESS);
+}
 
 bool ask_new_user(char username[MATRIX_USERNAME_MAX_LEN], char userpass[MATRIX_USERPASS_MAX_LEN])
 {
@@ -107,6 +114,14 @@ int main(int argc, char** argv)
                 }
         }
 
+        //TODO: Signal management on matrix library?
+        // Setup SIGINT action
+        struct sigaction sa;
+        sa.sa_handler = &sigint_handler;
+        sa.sa_flags = 0;
+        sigfillset(&sa.sa_mask);
+
+        sigaction(SIGINT, &sa, NULL);
         
         threads_init(THREAD_NUM);
 
