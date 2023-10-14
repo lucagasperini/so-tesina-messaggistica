@@ -1,5 +1,11 @@
 project(tesina-messaggistica)
 
+cmake_minimum_required(VERSION 3.25)
+
+if(NOT CMAKE_BINARY_DIR)
+        set(PROJECT_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
+endif()
+
 include_directories(lib/include/)
 
 add_library(matrix SHARED
