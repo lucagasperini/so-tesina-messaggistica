@@ -33,8 +33,8 @@ bool matrix_users_add(const char* username, const char* userpass)
 
         matrix_write_line(auth_fd, buffer);
 
-        // TODO: This is better here?
-        //matrix_sys_user_dir_create(username);
+        //TODO: Maybe check if user dir is created when try to login
+        matrix_sys_user_dir_create(username);
 
         MATRIX_LOG_INFO("User added: %s", username);
 
@@ -74,8 +74,6 @@ bool matrix_users_login(const char* username, const char* userpass)
                 if(strncmp(username, user, MATRIX_USERNAME_MAX_LEN) == 0) {
                         char* pass = strtok_r(NULL, "\n", &save_ptr);
                         if(strncmp(userpass, pass, MATRIX_USERPASS_MAX_LEN) == 0) {
-                                // TODO: This is safe, but is not better
-                                matrix_sys_user_dir_create(username);
                                 MATRIX_LOG_INFO("User login: %s", username);
                                 return true;
                         } else {
