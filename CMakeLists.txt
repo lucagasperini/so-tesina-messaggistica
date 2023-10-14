@@ -1,10 +1,13 @@
 project(tesina-messaggistica)
 
-cmake_minimum_required(VERSION 3.00)
+cmake_minimum_required(VERSION 3.11)
 
 if(NOT CMAKE_BINARY_DIR)
         set(PROJECT_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 endif()
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
 include_directories(lib/include/)
 
@@ -21,6 +24,8 @@ add_library(matrix SHARED
         lib/src/mem.c
         lib/src/darray.c
 )
+
+target_link_libraries(matrix PRIVATE Threads::Threads)
 
 add_executable(client 
         client/main.c 
@@ -39,5 +44,5 @@ add_executable(server
 set(server_dir "\"$ENV{HOME}/.matrix-server\"")
 target_compile_definitions(server PRIVATE -DTHREAD_NUM=10 -DMAX_CONNECTION=10 -DSERVER_MAIN_DIR=${server_dir})
 
-target_link_libraries(server matrix)
-target_link_libraries(client matrix)
+target_link_libraries(server matrix Threads::Threads)
+target_link_libraries(client matrix Threads::Threads)
