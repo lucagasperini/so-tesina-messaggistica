@@ -91,11 +91,10 @@ matrix_fd matrix_msg_receive_file(matrix_connection* con, matrix_msg_id id, cons
         sprintf(file, "%s" MATRIX_SYS_SEPARATOR "%u.eml", inbox, id);
         matrix_fd fd = matrix_file_open(file);
 
-        //TODO: Add define for -1 fd
-        if(fd == -1) {
-                return -1;
-        }
+        MATRIX_ASSERT(fd > 0)
 
+        // TODO: Remove file and print error if file not found
+        // TODO: What if i dont have permission to get this message?
         if(!matrix_proto_get_client(con, fd, id)) {
                 matrix_file_close(fd);
                 return -1;
@@ -157,6 +156,11 @@ bool matrix_msg_info_file(const char* filepath, matrix_msg_info* info)
 
         for(int i = 0; i < MATRIX_MSG_INFO_NUMROW; i++) {
                 nbytes = matrix_read_line(file, line, MATRIX_MSG_LINE_MAX);
+                if(nbytes <= 0) {
+                        MATRIX_LOG_ERR("Email file line cannot be len 0 [file: %s]", filepath);
+                        return false;
+                }
+
                 if(strncmp(line, MATRIX_MSG_LABEL_FROM, strlen(MATRIX_MSG_LABEL_FROM)) == 0) {
                         MATRIX_CALLOC(info->sender, nbytes - strlen(MATRIX_MSG_LABEL_FROM), 1);
                         strncpy(

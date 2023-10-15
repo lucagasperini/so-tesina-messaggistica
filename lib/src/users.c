@@ -124,7 +124,11 @@ matrix_stack* matrix_user_inbox(const char* user)
         matrix_msg_info buffer;
 
         while(dir_tmp != NULL) {
-                matrix_msg_info_inbox(user, dir_tmp->data, &buffer);
+                // If cant get info about an email, just skip it
+                if(!matrix_msg_info_inbox(user, dir_tmp->data, &buffer)) {
+                        dir_tmp = dir_tmp->next;
+                        continue;
+                }
                 info_head = matrix_stack_push(info_head, &buffer, sizeof(matrix_msg_info));
 
                 dir_tmp = dir_tmp->next;

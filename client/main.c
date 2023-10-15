@@ -143,7 +143,6 @@ int op_send()
         }
 }
 
-//TODO: Fix overflow on read message
 int op_read()
 {
         MATRIX_LOG_INFO("Read operation");
