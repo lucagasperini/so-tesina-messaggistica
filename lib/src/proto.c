@@ -558,12 +558,22 @@ bool matrix_proto_get_client(matrix_connection* con, matrix_fd file, matrix_msg_
 bool matrix_proto_get_server(matrix_connection* con, matrix_fd filetext)
 {
         matrix_proto_header send, receive;
+        size_t filesize;
 
-        size_t filesize = matrix_file_size(filetext);
+        // if there is no file, just send header without payload, else payload size is filetext size
+        if(filetext == -1) {
+                filesize = 0;
+        } else {
+                filesize = matrix_file_size(filetext);
+        }
 
         matrix_proto_create_header(&send, MATRIX_PROTO_SERVER_GET, filesize);
 
         if(!matrix_proto_send_header(con, &send)) {
+                return false;
+        }
+
+        if(filesize == 0) {
                 return false;
         }
 

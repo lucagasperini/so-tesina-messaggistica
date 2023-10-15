@@ -118,11 +118,6 @@ bool matrix_msg_send_file(matrix_connection* con, matrix_msg_id id, const char* 
         sprintf(file, "%s" MATRIX_SYS_SEPARATOR "%u.eml", inbox, id);
         matrix_fd fd = matrix_file_open_ro(file);
 
-        //TODO: Add define for -1 fd
-        if(fd == -1) {
-                return false;
-        }
-
         if(!matrix_proto_get_server(con, fd)) {
                 return false;
         }

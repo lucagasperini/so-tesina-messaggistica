@@ -130,9 +130,11 @@ matrix_request_result request_get(matrix_connection* con, const char* username)
         matrix_proto_receive_payload(con, &id, sizeof(matrix_msg_id));
 
         // send to the client the message file stored on server
-        matrix_msg_send_file(con, id, username);
+        if(!matrix_msg_send_file(con, id, username)) {
+                // TODO: What about those return code????
+                return 1;
+        }
 
-        // TODO: return something useful
         return 0;
 }
 
