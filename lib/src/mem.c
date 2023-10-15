@@ -52,6 +52,11 @@ void matrix_unpack_str(const void* src, size_t* index, char** dest)
 
         matrix_len len;
         matrix_unpack_u32(src, index, &len);
+        // if string is empty, just set destination memory pointer to a NULL
+        if(len == 0) {
+                *dest = NULL;
+                return;
+        }
         MATRIX_MALLOC(*dest, len);
 
         if(index != NULL) {

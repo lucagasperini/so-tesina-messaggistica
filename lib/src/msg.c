@@ -55,9 +55,10 @@ bool matrix_msg_create(const char* sender, const char* dest, const char* subject
         matrix_sys_user_dir_send(sender, path);
         matrix_msg_id id;
         matrix_fd fd = matrix_msg_create_file(path, sender, dest, subject, &id);
-        // TODO: Are you sure about that?
-        matrix_write_string(fd, text);
-
+        // TODO: What about VERY long text? seems need a rework for handle this
+        if(text != NULL) {
+                matrix_write_string(fd, text);
+        }
         matrix_sys_user_dir_inbox(dest, path);
         char dest_path[MATRIX_PATH_LEN];
         sprintf(dest_path, "%s" MATRIX_SYS_SEPARATOR "%u.eml", path, id);

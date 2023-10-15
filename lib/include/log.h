@@ -12,6 +12,13 @@ void matrix_log_debug(const char* msg, ...);
 void matrix_log_info(const char* msg, ...);
 void matrix_log_error(const char* msg, ...);
 
+#define _MATRIX_STRINGIZE2(x) #x
+#define _MATRIX_STRINGIZE(x) _MATRIX_STRINGIZE2(x)
+#define MATRIX_LOG_LINE __FILE__":"_MATRIX_STRINGIZE(__LINE__)
+
+#define _MATRIX_ASSERT(cond, msg, ...) if(!(cond)) { matrix_log_error("[ASSERT] (" #cond ") at (" MATRIX_LOG_LINE ")" msg "\n", __VA_ARGS__); exit(EXIT_FAILURE); }
+#define MATRIX_ASSERT(cond, ...) _MATRIX_ASSERT(cond, __VA_ARGS__, "")
+
 #define _MATRIX_LOG_SHOW(msg, ...) matrix_log_show(msg "\n", __VA_ARGS__)
 #define MATRIX_LOG_SHOW(...) _MATRIX_LOG_SHOW(__VA_ARGS__, "")
 
@@ -72,15 +79,17 @@ void matrix_log_error(const char* msg, ...);
 #define MATRIX_LOG_ERRNO(...) _MATRIX_LOG_ERRNO(__VA_ARGS__, errno)
 
 #define MATRIX_MALLOC(var, sz, ...)                                             \
+        MATRIX_ASSERT(sz > 0, "malloc invalid [var: %s]", #var);                \
         var = malloc(sz);                                                       \
         if(var == NULL)                                                         \
                 MATRIX_LOG_ERR("malloc failed [var: %s, sz: %d]", #var, sz);    \
         _MATRIX_LOG_MALLOC(__VA_ARGS__, #var, var, sz);
 
-#define MATRIX_CALLOC(var, num, sz, ...)                                                        \
-        var = calloc(num, sz);                                                                  \
-        if(var == NULL)                                                                         \
-                MATRIX_LOG_ERR("calloc failed [var: %s, num: %d, sz: %d]", #var, num, sz);      \
+#define MATRIX_CALLOC(var, num, sz, ...)                                                                \
+        MATRIX_ASSERT(sz > 0 && num > 0, "calloc invalid [var: %s, sz: %d, num: %d]", #var, sz, num);   \
+        var = calloc(num, sz);                                                                          \
+        if(var == NULL)                                                                                 \
+                MATRIX_LOG_ERR("calloc failed [var: %s, num: %d, sz: %d]", #var, num, sz);              \
         _MATRIX_LOG_CALLOC(__VA_ARGS__, #var, var, num, sz);
 
 #define MATRIX_FREE(var, ...)                           \
@@ -88,15 +97,8 @@ void matrix_log_error(const char* msg, ...);
         _MATRIX_LOG_FREE(__VA_ARGS__, #var, var);
 
 #define MATRIX_REALLOC(var, sz, ...)                                            \
+        MATRIX_ASSERT(sz > 0, "malloc invalid [var: %s]", #var);                \
         var = realloc(var, sz);                                                 \
         if(var == NULL)                                                         \
                 MATRIX_LOG_ERR("realloc failed [var: %s, sz: %d]", #var, sz);   \
         _MATRIX_LOG_REALLOC(__VA_ARGS__, #var, var, sz);
-
-
-#define _MATRIX_STRINGIZE2(x) #x
-#define _MATRIX_STRINGIZE(x) _MATRIX_STRINGIZE2(x)
-#define MATRIX_LOG_LINE __FILE__":"_MATRIX_STRINGIZE(__LINE__)
-
-#define _MATRIX_ASSERT(cond, msg, ...) if(!(cond)) { matrix_log_error("[ASSERT] (" #cond ") at (" MATRIX_LOG_LINE ")" msg "\n", __VA_ARGS__); exit(EXIT_FAILURE); }
-#define MATRIX_ASSERT(cond, ...) _MATRIX_ASSERT(cond, __VA_ARGS__, "")

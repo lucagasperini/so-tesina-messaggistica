@@ -284,13 +284,13 @@ int8_t matrix_proto_put_client(matrix_connection* con, const char* dest, const c
         matrix_proto_header put;
 
         size_t textlen = matrix_file_size(filetext);
-
+        
         char payload_head[MATRIX_USERNAME_MAX_LEN + MATRIX_SUBJECT_MAX_LEN + sizeof(uint64_t) + (sizeof(uint32_t) * 2)];
         size_t i = 0;
         matrix_pack_str(payload_head, &i, dest);
         matrix_pack_str(payload_head, &i, subject);
         matrix_pack_u32(payload_head, &i, textlen);
-
+        MATRIX_LOG_DEBUG("Sending payload for message [dest: \"%s\", subject: \"%s\", textlen: %llu", dest, subject, textlen);
 
         if(!matrix_proto_create_header(&put, MATRIX_PROTO_CLIENT_PUT, i + textlen)) {
                 MATRIX_LOG_ERR("Client cannot PUT, payload is too big [dest: \"%s\", subject: \"%s\", payload_len: %llu]",

@@ -52,6 +52,7 @@ matrix_request_result request_put(matrix_connection* con, const char* username, 
 
         matrix_unpack_str(payload, &i, &dest);
         matrix_unpack_str(payload, &i, &subject);
+        // WARNING: This can be NULL
         matrix_unpack_str(payload, &i, &text);
 
         // check if message informations are correct
