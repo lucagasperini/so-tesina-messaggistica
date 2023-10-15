@@ -87,16 +87,21 @@ matrix_fd matrix_msg_receive_file(matrix_connection* con, matrix_msg_id id, cons
 {
         char file[MATRIX_PATH_LEN];
         char inbox[MATRIX_PATH_LEN];
+        // Get user inbox directory
         matrix_sys_user_dir_inbox(username, inbox);
+        // Get file path where write on client directory
         sprintf(file, "%s" MATRIX_SYS_SEPARATOR "%u.eml", inbox, id);
+        // Create this file
         matrix_fd fd = matrix_file_open(file);
 
-        MATRIX_ASSERT(fd > 0)
+        MATRIX_ASSERT(fd == -1)
 
-        // TODO: Remove file and print error if file not found
-        // TODO: What if i dont have permission to get this message?
+        // Try to get this file from server
         if(!matrix_proto_get_client(con, fd, id)) {
+                MATRIX_LOG_ERR("Cannot fetch message [file: %s]", file);
+                // Close this file and delete from client inbox
                 matrix_file_close(fd);
+                matrix_file_delete(file);
                 return -1;
         }
 
@@ -111,7 +116,7 @@ bool matrix_msg_send_file(matrix_connection* con, matrix_msg_id id, const char* 
         char inbox[MATRIX_PATH_LEN];
         matrix_sys_user_dir_inbox(username, inbox);
         sprintf(file, "%s" MATRIX_SYS_SEPARATOR "%u.eml", inbox, id);
-        matrix_fd fd = matrix_file_open(file);
+        matrix_fd fd = matrix_file_open_ro(file);
 
         //TODO: Add define for -1 fd
         if(fd == -1) {

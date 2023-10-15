@@ -164,6 +164,7 @@ int op_read()
         matrix_fd fd = matrix_msg_receive_file(&con_server, id, login_username);
 
         if(fd == -1) {
+                MATRIX_LOG_ERRNO("Message %u not found!", id);
                 return -1;
         }
 
