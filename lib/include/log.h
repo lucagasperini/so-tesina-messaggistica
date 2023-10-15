@@ -93,5 +93,10 @@ void matrix_log_error(const char* msg, ...);
                 MATRIX_LOG_ERR("realloc failed [var: %s, sz: %d]", #var, sz);   \
         _MATRIX_LOG_REALLOC(__VA_ARGS__, #var, var, sz);
 
-#define _MATRIX_ASSERT(cond, msg, ...) if(!(cond)) { matrix_log_error("[ASSERT] (" #cond ") " msg "\n", __VA_ARGS__); exit(EXIT_FAILURE); }
+
+#define _MATRIX_STRINGIZE2(x) #x
+#define _MATRIX_STRINGIZE(x) _MATRIX_STRINGIZE2(x)
+#define MATRIX_LOG_LINE __FILE__":"_MATRIX_STRINGIZE(__LINE__)
+
+#define _MATRIX_ASSERT(cond, msg, ...) if(!(cond)) { matrix_log_error("[ASSERT] (" #cond ") at (" MATRIX_LOG_LINE ")" msg "\n", __VA_ARGS__); exit(EXIT_FAILURE); }
 #define MATRIX_ASSERT(cond, ...) _MATRIX_ASSERT(cond, __VA_ARGS__, "")
