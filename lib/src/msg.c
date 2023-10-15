@@ -94,7 +94,7 @@ matrix_fd matrix_msg_receive_file(matrix_connection* con, matrix_msg_id id, cons
         // Create this file
         matrix_fd fd = matrix_file_open(file);
 
-        MATRIX_ASSERT(fd == -1)
+        MATRIX_ASSERT(fd != -1)
 
         // Try to get this file from server
         if(!matrix_proto_get_client(con, fd, id)) {
