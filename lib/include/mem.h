@@ -3,6 +3,7 @@
 #include <sys/types.h> // size_t
 #include <stdint.h> // int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t, uint64_t
 #include <stdbool.h>
+#include <byteswap.h>
 
 #define MATRIX_ASSERT_VALID_MEM(ptr) MATRIX_ASSERT(ptr != 0, "Try to access to nullptr!")
 
@@ -16,15 +17,24 @@ static inline void matrix_pack_u8(void* dest, size_t* index, uint8_t val)
 }
 static inline void matrix_pack_u16(void* dest, size_t* index, uint16_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_16(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(uint16_t));
 }
 
 static inline void matrix_pack_u32(void* dest, size_t* index, uint32_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_32(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(uint32_t));
 }
 static inline void matrix_pack_u64(void* dest, size_t* index, uint64_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_64(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(uint64_t));
 }
 
@@ -34,14 +44,23 @@ static inline void matrix_pack_i8(void* dest, size_t* index, int8_t val)
 }
 static inline void matrix_pack_i16(void* dest, size_t* index, int16_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_16(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(int16_t));
 }
 static inline void matrix_pack_i32(void* dest, size_t* index, int32_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_32(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(int32_t));
 }
 static inline void matrix_pack_i64(void* dest, size_t* index, int64_t val)
 {
+        #ifdef MATRIX_BIG_ENDIAN
+        val = bswap_64(val);
+        #endif
         matrix_pack(dest, index, &val, sizeof(int64_t));
 }
 
@@ -56,14 +75,23 @@ static inline void matrix_unpack_u8(const void* src, size_t* index, uint8_t* val
 static inline void matrix_unpack_u16(const void* src, size_t* index, uint16_t* val)
 {
         matrix_unpack(src, index, val, sizeof(uint16_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_16(*val);
+        #endif
 }
 static inline void matrix_unpack_u32(const void* src, size_t* index, uint32_t* val)
 {
         matrix_unpack(src, index, val, sizeof(uint32_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_32(*val);
+        #endif
 }
 static inline void matrix_unpack_u64(const void* src, size_t* index, uint64_t* val)
 {
         matrix_unpack(src, index, val, sizeof(uint64_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_64(*val);
+        #endif
 }
 
 static inline void matrix_unpack_i8(const void* src, size_t* index, int8_t* val)
@@ -73,14 +101,23 @@ static inline void matrix_unpack_i8(const void* src, size_t* index, int8_t* val)
 static inline void matrix_unpack_i16(const void* src, size_t* index, int16_t* val)
 {
         matrix_unpack(src, index, val, sizeof(int16_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_16(*val);
+        #endif
 }
 static inline void matrix_unpack_i32(const void* src, size_t* index, int32_t* val)
 {
         matrix_unpack(src, index, val, sizeof(int32_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_32(*val);
+        #endif
 }
 static inline void matrix_unpack_i64(const void* src, size_t* index, int64_t* val)
 {
         matrix_unpack(src, index, val, sizeof(int64_t));
+        #ifdef MATRIX_BIG_ENDIAN
+        *val = bswap_64(*val);
+        #endif
 }
 
 void matrix_unpack_str(const void* src, size_t* index, char** dest);

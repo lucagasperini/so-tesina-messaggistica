@@ -122,7 +122,10 @@ int main(int argc, char** argv)
         sigfillset(&sa.sa_mask);
 
         sigaction(SIGINT, &sa, NULL);
+        sa.sa_handler = SIG_IGN;
         
+        sigaction(SIGPIPE, &sa, NULL);
+
         threads_init(THREAD_NUM);
 
         matrix_listen(&con_server, net_port, MAX_CONNECTION);

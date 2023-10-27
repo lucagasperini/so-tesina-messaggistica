@@ -42,6 +42,7 @@ add_executable(server
 )
 
 set(server_dir "\"$ENV{HOME}/.matrix-server\"")
+# Add -DMATRIX_BIG_ENDIAN if compiled for BIG ENDIAN ARCH
 target_compile_definitions(server PRIVATE -DTHREAD_NUM=10 -DMAX_CONNECTION=10 -DSERVER_MAIN_DIR=${server_dir})
 
 target_link_libraries(server matrix Threads::Threads)

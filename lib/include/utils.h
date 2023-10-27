@@ -3,7 +3,7 @@
 #include "log.h"
 
 #include <stdlib.h> // strtol
-#include <stdbool.h> 
+#include <stdbool.h> // true, false
 
 // TODO: Check for overflow
 // makes all characters lower case and remove endline
